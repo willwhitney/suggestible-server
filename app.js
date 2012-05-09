@@ -20,7 +20,8 @@
   app.configure('production', function() {
     return app.use(express.errorHandler());
   });
-  app.get('/', routes.index);
+  app.get('/movies', routes.movies);
+  app.get('/books', routes.books);
   app.listen(3000);
   console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 }).call(this);
