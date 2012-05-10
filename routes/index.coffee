@@ -6,8 +6,6 @@ nytkey = constants.nytkey
 exports.movies = (req, res) -> 
   
   res.writeHead(200)
-  # res.write("some text \n")
-  # res.write("some other text \n")
    
   options = {
     host: 'api.rottentomatoes.com',
@@ -16,7 +14,6 @@ exports.movies = (req, res) ->
     method: 'GET'
   }
     
-  # console.log( options.host + options.path)
   
   movies = ""
     
@@ -43,8 +40,6 @@ exports.movies = (req, res) ->
 exports.books = (req, res) -> 
 
   res.writeHead(200)
-  # res.write("some text \n")
-  # res.write("some other text \n")
    
   options = {
     host: 'api.nytimes.com',
@@ -52,8 +47,6 @@ exports.books = (req, res) ->
     path: '/svc/books/v2/lists/hardcover-fiction?api-key=' + nytkey,
     method: 'GET'
   }
-    
-  # console.log( options.host + options.path)
   
   books = ""
     
@@ -63,31 +56,26 @@ exports.books = (req, res) ->
     console.log 'HEADERS: ' + JSON.stringify(result.headers)
     result.setEncoding 'utf8'
     result.on('data', (chunk) ->
-      console.log("BODY: " + chunk)
+      # console.log("BODY: " + chunk)
       books += chunk
-      # res.write(chunk) 
     )
     result.on('end', () ->
       bookject = JSON.parse books
       bookject = (book['book_details'][0] for book in bookject['results'])
-      for book in bookject:
-        book['title'] = toTitleCase(book['title'])
-      
+
+      for book in bookject
+        if book.title?
+          book.title = toTitleCase(book.title)
+        else
+          console.log 'where the fuck is the title'
+
+      console.log(bookject)
+
       res.write JSON.stringify bookject
-      console.log("END")
+      console.log "END"
       res.end()
         
     )
-    # result.on('end', () ->
-    #   # res.write("\nEND OF FILE")
-    #   bookject = JSON.parse books
-    #   bookject = [book['book_details'][0] for book in bookject['results']][0]
-    #   for book in bookject:
-    #     book['title'] = toTitleCase(book['title'])
-    #   # res.write JSON.stringify bookject
-    #   # console.log("END")
-    #   # res.end()
-    # )
     
   )
   
