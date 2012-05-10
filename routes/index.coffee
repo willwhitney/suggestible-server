@@ -2,6 +2,10 @@ http = require('http')
 constants = require '../constants'
 rtkey = constants.rtkey
 nytkey = constants.nytkey
+yelp_consumer_key = constants.yelp_consumer_key
+yelp_consumer_secret = constants.yelp_consumer_secret
+yelp_oauth_token = constants.yelp_oauth_token
+yelp_token_secret = constants.yelp_token_secret
 
 exports.movies = (req, res) -> 
   
@@ -79,10 +83,83 @@ exports.books = (req, res) ->
     
   )
   
+exports.restaurants = (req, res) -> 
+
+  yelp = require("yelp").createClient({
+    consumer_key: yelp_consumer_key, 
+    consumer_secret: yelp_consumer_secret,
+    token: yelp_oauth_token,
+    token_secret: yelp_token_secret
+  })
+
+  lat = req.query['lat']
+  lon = req.query['lon']
+  console.log lat, lon
+
+  res.writeHead(200)
+       
+  
+  yelp.search({term: "restaurants", ll: "#{lat},#{lon}"}, (error, places) ->
+    if error?
+      console.log error
+    
+    console.log places
+    places = places.businesses
+    res.write JSON.stringify places
+    
+    res.end()
+  )
+  
+  ###  
+  http.get(options, (result) ->
+    
+    console.log 'STATUS: ' + result.statusCode
+    console.log 'HEADERS: ' + JSON.stringify(result.headers)
+    result.setEncoding 'utf8'
+    result.on('data', (chunk) ->
+      console.log("BODY: " + chunk)
+      places += chunk
+    )
+    result.on('end', () ->
+      placeject = JSON.parse places
+  
+  
+      res.write JSON.stringify placeject
+      console.log "END"
+      res.end()
+        
+    )
+    
+  )
+  ###
+
+  
   
 toTitleCase = (str) ->
   return str.replace(/\w\S*/g, (txt) -> 
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase())
 
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
