@@ -99,40 +99,54 @@ exports.restaurants = (req, res) ->
   res.writeHead(200)
        
   
-  yelp.search({term: "restaurants", ll: "#{lat},#{lon}"}, (error, places) ->
+  yelp.search({category_filter: "restaurants,bars", sort:2, ll: "#{lat},#{lon}"}, (error, places) ->
     if error?
       console.log error
     
-    console.log places
     places = places.businesses
+    
+    for place in places
+      place.description = place.snippet_text
+
+    console.log places
     res.write JSON.stringify places
     
     res.end()
   )
   
-  ###  
-  http.get(options, (result) ->
-    
-    console.log 'STATUS: ' + result.statusCode
-    console.log 'HEADERS: ' + JSON.stringify(result.headers)
-    result.setEncoding 'utf8'
-    result.on('data', (chunk) ->
-      console.log("BODY: " + chunk)
-      places += chunk
-    )
-    result.on('end', () ->
-      placeject = JSON.parse places
   
-  
-      res.write JSON.stringify placeject
-      console.log "END"
-      res.end()
-        
-    )
-    
-  )
-  ###
 
+exports.outings = (req, res) -> 
+
+  yelp = require("yelp").createClient({
+    consumer_key: yelp_consumer_key, 
+    consumer_secret: yelp_consumer_secret,
+    token: yelp_oauth_token,
+    token_secret: yelp_token_secret
+  })
+  
+  lat = req.query['lat']
+  lon = req.query['lon']
+  console.log lat, lon
+  
+  res.writeHead(200)
+       
+  
+  yelp.search({category_filter: "localflavor", sort:2, ll: "#{lat},#{lon}"}, (error, places) ->
+    if error?
+      console.log error
+    
+
+    places = places.businesses
+    
+    for place in places
+      place["description"] = place['snippet_text']
+
+    console.log places    
+    res.write JSON.stringify places
+    
+    res.end()
+  )
   
   
 toTitleCase = (str) ->

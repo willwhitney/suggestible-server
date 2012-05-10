@@ -105,40 +105,55 @@
     console.log(lat, lon);
     res.writeHead(200);
     return yelp.search({
-      term: "restaurants",
+      category_filter: "restaurants,bars",
+      sort: 2,
       ll: "" + lat + "," + lon
     }, function(error, places) {
+      var place, _i, _len;
       if (error != null) {
         console.log(error);
       }
-      console.log(places);
       places = places.businesses;
+      for (_i = 0, _len = places.length; _i < _len; _i++) {
+        place = places[_i];
+        place.description = place.snippet_text;
+      }
+      console.log(places);
       res.write(JSON.stringify(places));
       return res.end();
     });
-    /*  
-    http.get(options, (result) ->
-      
-      console.log 'STATUS: ' + result.statusCode
-      console.log 'HEADERS: ' + JSON.stringify(result.headers)
-      result.setEncoding 'utf8'
-      result.on('data', (chunk) ->
-        console.log("BODY: " + chunk)
-        places += chunk
-      )
-      result.on('end', () ->
-        placeject = JSON.parse places
-    
-    
-        res.write JSON.stringify placeject
-        console.log "END"
-        res.end()
-          
-      )
-      
-    )
-    */
+  };
 
+  exports.outings = function(req, res) {
+    var lat, lon, yelp;
+    yelp = require("yelp").createClient({
+      consumer_key: yelp_consumer_key,
+      consumer_secret: yelp_consumer_secret,
+      token: yelp_oauth_token,
+      token_secret: yelp_token_secret
+    });
+    lat = req.query['lat'];
+    lon = req.query['lon'];
+    console.log(lat, lon);
+    res.writeHead(200);
+    return yelp.search({
+      category_filter: "localflavor",
+      sort: 2,
+      ll: "" + lat + "," + lon
+    }, function(error, places) {
+      var place, _i, _len;
+      if (error != null) {
+        console.log(error);
+      }
+      places = places.businesses;
+      for (_i = 0, _len = places.length; _i < _len; _i++) {
+        place = places[_i];
+        place["description"] = place['snippet_text'];
+      }
+      console.log(places);
+      res.write(JSON.stringify(places));
+      return res.end();
+    });
   };
 
   toTitleCase = function(str) {
