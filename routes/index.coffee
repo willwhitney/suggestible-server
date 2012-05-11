@@ -9,6 +9,8 @@ yelp_token_secret = constants.yelp_token_secret
 
 exports.movies = (req, res) -> 
   
+  console.log "request for movies"
+  
   res.writeHead(200)
    
   options = {
@@ -23,11 +25,11 @@ exports.movies = (req, res) ->
     
   http.get(options, (result) ->
     
-    console.log 'STATUS: ' + result.statusCode
-    console.log 'HEADERS: ' + JSON.stringify(result.headers)
+    # console.log 'STATUS: ' + result.statusCode
+    # console.log 'HEADERS: ' + JSON.stringify(result.headers)
     result.setEncoding 'utf8'
     result.on('data', (chunk) ->
-      console.log "BODY: " + chunk
+      # console.log "BODY: " + chunk
       movies += chunk
       
     )
@@ -35,13 +37,15 @@ exports.movies = (req, res) ->
       # res.write("\nEND OF FILE")
       movieject = JSON.parse(movies)['movies']
       res.write JSON.stringify movieject
-      console.log("END");
+      # console.log("END");
       res.end()
     )
     
   )
 
 exports.books = (req, res) -> 
+
+  console.log "request for books"
 
   res.writeHead(200)
    
@@ -56,8 +60,8 @@ exports.books = (req, res) ->
     
   http.get(options, (result) ->
     
-    console.log 'STATUS: ' + result.statusCode
-    console.log 'HEADERS: ' + JSON.stringify(result.headers)
+    # console.log 'STATUS: ' + result.statusCode
+    # console.log 'HEADERS: ' + JSON.stringify(result.headers)
     result.setEncoding 'utf8'
     result.on('data', (chunk) ->
       # console.log("BODY: " + chunk)
@@ -73,10 +77,10 @@ exports.books = (req, res) ->
         else
           console.log 'where the fuck is the title'
 
-      console.log(bookject)
+      # console.log(bookject)
 
       res.write JSON.stringify bookject
-      console.log "END"
+      # console.log "END"
       res.end()
         
     )
@@ -85,16 +89,18 @@ exports.books = (req, res) ->
   
 exports.restaurants = (req, res) -> 
 
+  console.log "request for restaurants at lat, long: "
+  lat = req.query['lat']
+  lon = req.query['lon']
+  console.log lat, lon
+
+
   yelp = require("yelp").createClient({
     consumer_key: yelp_consumer_key, 
     consumer_secret: yelp_consumer_secret,
     token: yelp_oauth_token,
     token_secret: yelp_token_secret
   })
-
-  lat = req.query['lat']
-  lon = req.query['lon']
-  console.log lat, lon
 
   res.writeHead(200)
        
@@ -108,7 +114,7 @@ exports.restaurants = (req, res) ->
     for place in places
       place.description = place.snippet_text
 
-    console.log places
+    # console.log places
     res.write JSON.stringify places
     
     res.end()
@@ -118,17 +124,19 @@ exports.restaurants = (req, res) ->
 
 exports.outings = (req, res) -> 
 
+  console.log "request for outings at lat, long: "
+  lat = req.query['lat']
+  lon = req.query['lon']
+  console.log lat, lon
+
+
   yelp = require("yelp").createClient({
     consumer_key: yelp_consumer_key, 
     consumer_secret: yelp_consumer_secret,
     token: yelp_oauth_token,
     token_secret: yelp_token_secret
   })
-  
-  lat = req.query['lat']
-  lon = req.query['lon']
-  console.log lat, lon
-  
+    
   res.writeHead(200)
        
   
@@ -142,7 +150,7 @@ exports.outings = (req, res) ->
     for place in places
       place["description"] = place['snippet_text']
 
-    console.log places    
+    # console.log places    
     res.write JSON.stringify places
     
     res.end()

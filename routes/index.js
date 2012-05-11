@@ -20,6 +20,7 @@
 
   exports.movies = function(req, res) {
     var movies, options;
+    console.log("request for movies");
     res.writeHead(200);
     options = {
       host: 'api.rottentomatoes.com',
@@ -29,18 +30,14 @@
     };
     movies = "";
     return http.get(options, function(result) {
-      console.log('STATUS: ' + result.statusCode);
-      console.log('HEADERS: ' + JSON.stringify(result.headers));
       result.setEncoding('utf8');
       result.on('data', function(chunk) {
-        console.log("BODY: " + chunk);
         return movies += chunk;
       });
       return result.on('end', function() {
         var movieject;
         movieject = JSON.parse(movies)['movies'];
         res.write(JSON.stringify(movieject));
-        console.log("END");
         return res.end();
       });
     });
@@ -48,6 +45,7 @@
 
   exports.books = function(req, res) {
     var books, options;
+    console.log("request for books");
     res.writeHead(200);
     options = {
       host: 'api.nytimes.com',
@@ -57,8 +55,6 @@
     };
     books = "";
     return http.get(options, function(result) {
-      console.log('STATUS: ' + result.statusCode);
-      console.log('HEADERS: ' + JSON.stringify(result.headers));
       result.setEncoding('utf8');
       result.on('data', function(chunk) {
         return books += chunk;
@@ -84,9 +80,7 @@
             console.log('where the fuck is the title');
           }
         }
-        console.log(bookject);
         res.write(JSON.stringify(bookject));
-        console.log("END");
         return res.end();
       });
     });
@@ -94,15 +88,16 @@
 
   exports.restaurants = function(req, res) {
     var lat, lon, yelp;
+    console.log("request for restaurants at lat, long: ");
+    lat = req.query['lat'];
+    lon = req.query['lon'];
+    console.log(lat, lon);
     yelp = require("yelp").createClient({
       consumer_key: yelp_consumer_key,
       consumer_secret: yelp_consumer_secret,
       token: yelp_oauth_token,
       token_secret: yelp_token_secret
     });
-    lat = req.query['lat'];
-    lon = req.query['lon'];
-    console.log(lat, lon);
     res.writeHead(200);
     return yelp.search({
       category_filter: "restaurants,bars",
@@ -118,7 +113,6 @@
         place = places[_i];
         place.description = place.snippet_text;
       }
-      console.log(places);
       res.write(JSON.stringify(places));
       return res.end();
     });
@@ -126,15 +120,16 @@
 
   exports.outings = function(req, res) {
     var lat, lon, yelp;
+    console.log("request for outings at lat, long: ");
+    lat = req.query['lat'];
+    lon = req.query['lon'];
+    console.log(lat, lon);
     yelp = require("yelp").createClient({
       consumer_key: yelp_consumer_key,
       consumer_secret: yelp_consumer_secret,
       token: yelp_oauth_token,
       token_secret: yelp_token_secret
     });
-    lat = req.query['lat'];
-    lon = req.query['lon'];
-    console.log(lat, lon);
     res.writeHead(200);
     return yelp.search({
       category_filter: "localflavor",
@@ -150,7 +145,6 @@
         place = places[_i];
         place["description"] = place['snippet_text'];
       }
-      console.log(places);
       res.write(JSON.stringify(places));
       return res.end();
     });
