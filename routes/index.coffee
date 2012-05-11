@@ -81,7 +81,7 @@ exports.books = (req, res) ->
       for book in bookject
         if book.title?
           book.title = toTitleCase(book.title)
-          book.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + book.title
+          book.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(book.title)
         else
           console.log 'where the fuck is the title'
 
@@ -121,7 +121,7 @@ exports.restaurants = (req, res) ->
     
     for place in places
       place.description = place.snippet_text
-      place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + place.name
+      place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name)
 
     console.log places
     res.write JSON.stringify places
@@ -158,7 +158,7 @@ exports.outings = (req, res) ->
     
     for place in places
       place["description"] = place['snippet_text']
-      place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + place.name
+      place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name)
 
     console.log places    
     res.write JSON.stringify places

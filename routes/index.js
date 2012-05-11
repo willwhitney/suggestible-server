@@ -84,7 +84,7 @@
           book = bookject[_i];
           if (book.title != null) {
             book.title = toTitleCase(book.title);
-            book.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + book.title;
+            book.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(book.title);
           } else {
             console.log('where the fuck is the title');
           }
@@ -121,7 +121,7 @@
       for (_i = 0, _len = places.length; _i < _len; _i++) {
         place = places[_i];
         place.description = place.snippet_text;
-        place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + place.name;
+        place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name);
       }
       console.log(places);
       res.write(JSON.stringify(places));
@@ -155,7 +155,7 @@
       for (_i = 0, _len = places.length; _i < _len; _i++) {
         place = places[_i];
         place["description"] = place['snippet_text'];
-        place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + place.name;
+        place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name);
       }
       console.log(places);
       res.write(JSON.stringify(places));
