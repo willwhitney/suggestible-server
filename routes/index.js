@@ -180,14 +180,12 @@
     return http.get(options, function(result) {
       result.setEncoding('utf8');
       result.on('data', function(chunk) {
-        console.log("BODY: " + chunk);
         return images += chunk;
       });
       return result.on('end', function() {
         var image, imageject, _i, _len;
         imageject = JSON.parse(images);
         imageject = imageject.responseData.results;
-        console.log(imageject);
         for (_i = 0, _len = imageject.length; _i < _len; _i++) {
           image = imageject[_i];
           if (image.height > 400 && image.height < 900) {

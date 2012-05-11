@@ -190,14 +190,14 @@ exports.imageSearch = (req, res) ->
     # console.log 'HEADERS: ' + JSON.stringify(result.headers)
     result.setEncoding 'utf8'
     result.on('data', (chunk) ->
-      console.log("BODY: " + chunk)
+      # console.log("BODY: " + chunk)
       images += chunk
     )
     result.on('end', () ->
       imageject = JSON.parse images
       imageject = imageject.responseData.results
   
-      console.log(imageject)
+      # console.log(imageject)
   
       # console.log "END"
       for image in imageject
