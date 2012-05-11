@@ -37,8 +37,8 @@ exports.movies = (req, res) ->
       movieject = JSON.parse(movies)['movies']
       
       for movie in movieject
-        if movie.posters.original?
-          movie.imageurl = movie.posters.original
+        if movie.posters.detailed?
+          movie.imageurl = movie.posters.detailed
         else
           console.log 'where the fuck is the image'
 
