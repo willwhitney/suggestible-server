@@ -122,6 +122,7 @@
         place = places[_i];
         place.title = place.name;
         place.description = place.snippet_text;
+        place.url = place.mobile_url;
         place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name);
       }
       console.log(places);
@@ -156,6 +157,7 @@
       for (_i = 0, _len = places.length; _i < _len; _i++) {
         place = places[_i];
         place.title = place.name;
+        place.url = place.mobile_url;
         place["description"] = place['snippet_text'];
         place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name);
       }
