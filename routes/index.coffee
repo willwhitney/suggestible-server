@@ -201,7 +201,7 @@ exports.imageSearch = (req, res) ->
   
       # console.log "END"
       for image in imageject
-        if image.height > 400
+        if image.height > 400 and image.height < 900
           res.redirect(image.url)
           return
       res.redirect(imageject[0].url)

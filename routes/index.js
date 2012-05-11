@@ -190,7 +190,7 @@
         console.log(imageject);
         for (_i = 0, _len = imageject.length; _i < _len; _i++) {
           image = imageject[_i];
-          if (image.height > 400) {
+          if (image.height > 400 && image.height < 900) {
             res.redirect(image.url);
             return;
           }
