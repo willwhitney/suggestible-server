@@ -34,8 +34,15 @@ exports.movies = (req, res) ->
       
     )
     result.on('end', () ->
-      # res.write("\nEND OF FILE")
       movieject = JSON.parse(movies)['movies']
+      
+      for movie in movieject
+        if movie.posters.original?
+          movie.imageurl = movie.posters.original
+        else
+          console.log 'where the fuck is the image'
+
+      console.log movieject
       res.write JSON.stringify movieject
       # console.log("END");
       res.end()
