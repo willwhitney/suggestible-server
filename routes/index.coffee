@@ -42,7 +42,7 @@ exports.movies = (req, res) ->
         else
           console.log 'where the fuck is the image'
 
-      console.log movieject
+      # console.log movieject
       res.write JSON.stringify movieject
       # console.log("END");
       res.end()

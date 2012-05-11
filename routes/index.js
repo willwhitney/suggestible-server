@@ -45,7 +45,6 @@
             console.log('where the fuck is the image');
           }
         }
-        console.log(movieject);
         res.write(JSON.stringify(movieject));
         return res.end();
       });
