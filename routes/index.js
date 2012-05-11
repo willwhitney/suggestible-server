@@ -39,8 +39,8 @@
         movieject = JSON.parse(movies)['movies'];
         for (_i = 0, _len = movieject.length; _i < _len; _i++) {
           movie = movieject[_i];
-          if (movie.posters.detailed != null) {
-            movie.imageurl = movie.posters.detailed;
+          if (movie.posters.original != null) {
+            movie.imageurl = movie.posters.original;
           } else {
             console.log('where the fuck is the image');
           }
