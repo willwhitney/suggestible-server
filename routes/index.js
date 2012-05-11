@@ -182,10 +182,17 @@
         return images += chunk;
       });
       return result.on('end', function() {
-        var imageject;
+        var image, imageject, _i, _len;
         imageject = JSON.parse(images);
         imageject = imageject.responseData.results;
         console.log(imageject);
+        for (_i = 0, _len = imageject.length; _i < _len; _i++) {
+          image = imageject[_i];
+          if (image.height > 300) {
+            res.redirect(image.url);
+            return;
+          }
+        }
         return res.redirect(imageject[0].url);
       });
     });
