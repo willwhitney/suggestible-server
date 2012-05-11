@@ -36,6 +36,8 @@
 
   app.get('/outings', routes.outings);
 
+  app.get('/imageSearch', routes.imageSearch);
+
   port = process.env.PORT || 3000;
 
   app.listen(port);

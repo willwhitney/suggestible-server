@@ -81,6 +81,7 @@ exports.books = (req, res) ->
       for book in bookject
         if book.title?
           book.title = toTitleCase(book.title)
+          book.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + book.title
         else
           console.log 'where the fuck is the title'
 
@@ -120,8 +121,9 @@ exports.restaurants = (req, res) ->
     
     for place in places
       place.description = place.snippet_text
+      place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + place.name
 
-    # console.log places
+    console.log places
     res.write JSON.stringify places
     
     res.end()
@@ -156,13 +158,48 @@ exports.outings = (req, res) ->
     
     for place in places
       place["description"] = place['snippet_text']
+      place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + place.name
 
-    # console.log places    
+    console.log places    
     res.write JSON.stringify places
     
     res.end()
   )
   
+  
+exports.imageSearch = (req, res) ->
+
+  search = encodeURIComponent(req.query['query'])
+
+  options = {
+    host: 'ajax.googleapis.com',
+    port: '80',
+    path: "/ajax/services/search/images?v=1.0&q=#{search}",
+    method: 'GET'
+  }
+  
+  images = ""
+    
+  http.get(options, (result) ->
+    
+    # console.log 'STATUS: ' + result.statusCode
+    # console.log 'HEADERS: ' + JSON.stringify(result.headers)
+    result.setEncoding 'utf8'
+    result.on('data', (chunk) ->
+      console.log("BODY: " + chunk)
+      images += chunk
+    )
+    result.on('end', () ->
+      imageject = JSON.parse images
+      imageject = imageject.responseData.results
+  
+      console.log(imageject)
+  
+      # console.log "END"
+      res.redirect(imageject[0].url)
+        
+    )
+  )
   
 toTitleCase = (str) ->
   return str.replace(/\w\S*/g, (txt) -> 

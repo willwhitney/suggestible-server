@@ -84,6 +84,7 @@
           book = bookject[_i];
           if (book.title != null) {
             book.title = toTitleCase(book.title);
+            book.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + book.title;
           } else {
             console.log('where the fuck is the title');
           }
@@ -120,7 +121,9 @@
       for (_i = 0, _len = places.length; _i < _len; _i++) {
         place = places[_i];
         place.description = place.snippet_text;
+        place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + place.name;
       }
+      console.log(places);
       res.write(JSON.stringify(places));
       return res.end();
     });
@@ -152,9 +155,37 @@
       for (_i = 0, _len = places.length; _i < _len; _i++) {
         place = places[_i];
         place["description"] = place['snippet_text'];
+        place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + place.name;
       }
+      console.log(places);
       res.write(JSON.stringify(places));
       return res.end();
+    });
+  };
+
+  exports.imageSearch = function(req, res) {
+    var images, options, search;
+    search = encodeURIComponent(req.query['query']);
+    options = {
+      host: 'ajax.googleapis.com',
+      port: '80',
+      path: "/ajax/services/search/images?v=1.0&q=" + search,
+      method: 'GET'
+    };
+    images = "";
+    return http.get(options, function(result) {
+      result.setEncoding('utf8');
+      result.on('data', function(chunk) {
+        console.log("BODY: " + chunk);
+        return images += chunk;
+      });
+      return result.on('end', function() {
+        var imageject;
+        imageject = JSON.parse(images);
+        imageject = imageject.responseData.results;
+        console.log(imageject);
+        return res.redirect(imageject[0].url);
+      });
     });
   };
 
