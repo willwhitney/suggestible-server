@@ -120,6 +120,7 @@ exports.restaurants = (req, res) ->
     places = places.businesses
     
     for place in places
+      place.title = place.name
       place.description = place.snippet_text
       place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name)
 
@@ -157,6 +158,7 @@ exports.outings = (req, res) ->
     places = places.businesses
     
     for place in places
+      place.title = place.name
       place["description"] = place['snippet_text']
       place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name)
 
