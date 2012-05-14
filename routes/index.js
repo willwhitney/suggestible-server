@@ -18,6 +18,11 @@
 
   yelp_token_secret = constants.yelp_token_secret;
 
+  process.on('uncaughtException', function(err) {
+    console.error(err);
+    return console.log("Node NOT Exiting...");
+  });
+
   exports.movies = function(req, res) {
     var movies, options;
     console.log("request for movies");

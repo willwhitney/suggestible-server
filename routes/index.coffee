@@ -7,6 +7,12 @@ yelp_consumer_secret = constants.yelp_consumer_secret
 yelp_oauth_token = constants.yelp_oauth_token
 yelp_token_secret = constants.yelp_token_secret
 
+
+process.on('uncaughtException', (err) ->
+  console.error(err)
+  console.log("Node NOT Exiting...")
+)
+
 exports.movies = (req, res) -> 
   
   console.log "request for movies"
