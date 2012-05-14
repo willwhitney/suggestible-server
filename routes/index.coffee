@@ -46,7 +46,12 @@ exports.movies = (req, res) ->
         catch e
           "Some shit went wrong parsing movies."
           # console.log e
-        
+          
+        if !movieject?
+          console.log "movieject doesn't exist, for some reason."
+          console.log "this is what RT gave me: "
+          console.log movies
+          
         for movie in movieject
           if movie.posters.detailed?
             movie.imageurl = movie.posters.detailed

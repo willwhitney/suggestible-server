@@ -48,6 +48,11 @@
             "Some shit went wrong parsing movies.";
 
           }
+          if (!(movieject != null)) {
+            console.log("movieject doesn't exist, for some reason.");
+            console.log("this is what RT gave me: ");
+            console.log(movies);
+          }
           for (_i = 0, _len = movieject.length; _i < _len; _i++) {
             movie = movieject[_i];
             if (movie.posters.detailed != null) {
