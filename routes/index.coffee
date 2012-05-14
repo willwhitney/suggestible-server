@@ -16,7 +16,7 @@ exports.movies = (req, res) ->
   options = {
     host: 'api.rottentomatoes.com',
     port: '80',
-    path: '/api/public/v1.0/lists/movies/box_office.json?apikey=' + rtkey,
+    path: 'api/public/v1.0/lists/movies/box_office.json?limit=20&country=us&apikey=' + rtkey,
     method: 'GET'
   }
     
@@ -34,7 +34,7 @@ exports.movies = (req, res) ->
         
       )
       result.on('end', () ->
-        console.log movies
+        # console.log movies
         try
           movieject = JSON.parse(movies)['movies']
         catch e

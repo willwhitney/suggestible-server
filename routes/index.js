@@ -25,7 +25,7 @@
     options = {
       host: 'api.rottentomatoes.com',
       port: '80',
-      path: '/api/public/v1.0/lists/movies/box_office.json?apikey=' + rtkey,
+      path: 'api/public/v1.0/lists/movies/box_office.json?limit=20&country=us&apikey=' + rtkey,
       method: 'GET'
     };
     movies = "";
@@ -37,7 +37,6 @@
         });
         return result.on('end', function() {
           var movie, movieject, _i, _len;
-          console.log(movies);
           try {
             movieject = JSON.parse(movies)['movies'];
           } catch (e) {
