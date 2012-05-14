@@ -64,36 +64,38 @@ exports.books = (req, res) ->
   }
   
   books = ""
-    
-  http.get(options, (result) ->
-    
-    # console.log 'STATUS: ' + result.statusCode
-    # console.log 'HEADERS: ' + JSON.stringify(result.headers)
-    result.setEncoding 'utf8'
-    result.on('data', (chunk) ->
-      # console.log("BODY: " + chunk)
-      books += chunk
+  
+  try
+    http.get(options, (result) ->
+      
+      # console.log 'STATUS: ' + result.statusCode
+      # console.log 'HEADERS: ' + JSON.stringify(result.headers)
+      result.setEncoding 'utf8'
+      result.on('data', (chunk) ->
+        # console.log("BODY: " + chunk)
+        books += chunk
+      )
+      result.on('end', () ->
+        bookject = JSON.parse books
+        bookject = (book['book_details'][0] for book in bookject['results'])
+  
+        for book in bookject
+          if book.title?
+            book.title = toTitleCase(book.title)
+            book.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(book.title)
+          else
+            console.log 'where the fuck is the title'
+  
+        # console.log(bookject)
+  
+        res.write JSON.stringify bookject
+        # console.log "END"
+        res.end()
+          
+      )
     )
-    result.on('end', () ->
-      bookject = JSON.parse books
-      bookject = (book['book_details'][0] for book in bookject['results'])
-
-      for book in bookject
-        if book.title?
-          book.title = toTitleCase(book.title)
-          book.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(book.title)
-        else
-          console.log 'where the fuck is the title'
-
-      # console.log(bookject)
-
-      res.write JSON.stringify bookject
-      # console.log "END"
-      res.end()
-        
-    )
-    
-  )
+  catch e
+      console.log e
   
 exports.restaurants = (req, res) -> 
 

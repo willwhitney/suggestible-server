@@ -62,37 +62,41 @@
       method: 'GET'
     };
     books = "";
-    return http.get(options, function(result) {
-      result.setEncoding('utf8');
-      result.on('data', function(chunk) {
-        return books += chunk;
-      });
-      return result.on('end', function() {
-        var book, bookject, _i, _len;
-        bookject = JSON.parse(books);
-        bookject = (function() {
-          var _i, _len, _ref, _results;
-          _ref = bookject['results'];
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            book = _ref[_i];
-            _results.push(book['book_details'][0]);
+    try {
+      return http.get(options, function(result) {
+        result.setEncoding('utf8');
+        result.on('data', function(chunk) {
+          return books += chunk;
+        });
+        return result.on('end', function() {
+          var book, bookject, _i, _len;
+          bookject = JSON.parse(books);
+          bookject = (function() {
+            var _i, _len, _ref, _results;
+            _ref = bookject['results'];
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              book = _ref[_i];
+              _results.push(book['book_details'][0]);
+            }
+            return _results;
+          })();
+          for (_i = 0, _len = bookject.length; _i < _len; _i++) {
+            book = bookject[_i];
+            if (book.title != null) {
+              book.title = toTitleCase(book.title);
+              book.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(book.title);
+            } else {
+              console.log('where the fuck is the title');
+            }
           }
-          return _results;
-        })();
-        for (_i = 0, _len = bookject.length; _i < _len; _i++) {
-          book = bookject[_i];
-          if (book.title != null) {
-            book.title = toTitleCase(book.title);
-            book.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(book.title);
-          } else {
-            console.log('where the fuck is the title');
-          }
-        }
-        res.write(JSON.stringify(bookject));
-        return res.end();
+          res.write(JSON.stringify(bookject));
+          return res.end();
+        });
       });
-    });
+    } catch (e) {
+      return console.log(e);
+    }
   };
 
   exports.restaurants = function(req, res) {
