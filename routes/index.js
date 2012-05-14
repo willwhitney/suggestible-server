@@ -29,26 +29,30 @@
       method: 'GET'
     };
     movies = "";
-    return http.get(options, function(result) {
-      result.setEncoding('utf8');
-      result.on('data', function(chunk) {
-        return movies += chunk;
-      });
-      return result.on('end', function() {
-        var movie, movieject, _i, _len;
-        movieject = JSON.parse(movies)['movies'];
-        for (_i = 0, _len = movieject.length; _i < _len; _i++) {
-          movie = movieject[_i];
-          if (movie.posters.detailed != null) {
-            movie.imageurl = movie.posters.detailed;
-          } else {
-            console.log('where the fuck is the image');
+    try {
+      return http.get(options, function(result) {
+        result.setEncoding('utf8');
+        result.on('data', function(chunk) {
+          return movies += chunk;
+        });
+        return result.on('end', function() {
+          var movie, movieject, _i, _len;
+          movieject = JSON.parse(movies)['movies'];
+          for (_i = 0, _len = movieject.length; _i < _len; _i++) {
+            movie = movieject[_i];
+            if (movie.posters.detailed != null) {
+              movie.imageurl = movie.posters.detailed;
+            } else {
+              console.log('where the fuck is the image');
+            }
           }
-        }
-        res.write(JSON.stringify(movieject));
-        return res.end();
+          res.write(JSON.stringify(movieject));
+          return res.end();
+        });
       });
-    });
+    } catch (e) {
+      return console.log(e);
+    }
   };
 
   exports.books = function(req, res) {

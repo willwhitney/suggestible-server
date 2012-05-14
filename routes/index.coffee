@@ -22,33 +22,35 @@ exports.movies = (req, res) ->
     
   
   movies = ""
-    
-  http.get(options, (result) ->
-    
-    # console.log 'STATUS: ' + result.statusCode
-    # console.log 'HEADERS: ' + JSON.stringify(result.headers)
-    result.setEncoding 'utf8'
-    result.on('data', (chunk) ->
-      # console.log "BODY: " + chunk
-      movies += chunk
+  try
+    http.get(options, (result) ->
+      
+      # console.log 'STATUS: ' + result.statusCode
+      # console.log 'HEADERS: ' + JSON.stringify(result.headers)
+      result.setEncoding 'utf8'
+      result.on('data', (chunk) ->
+        # console.log "BODY: " + chunk
+        movies += chunk
+        
+      )
+      result.on('end', () ->
+        movieject = JSON.parse(movies)['movies']
+        
+        for movie in movieject
+          if movie.posters.detailed?
+            movie.imageurl = movie.posters.detailed
+          else
+            console.log 'where the fuck is the image'
+  
+        # console.log movieject
+        res.write JSON.stringify movieject
+        # console.log("END");
+        res.end()
+      )
       
     )
-    result.on('end', () ->
-      movieject = JSON.parse(movies)['movies']
-      
-      for movie in movieject
-        if movie.posters.detailed?
-          movie.imageurl = movie.posters.detailed
-        else
-          console.log 'where the fuck is the image'
-
-      # console.log movieject
-      res.write JSON.stringify movieject
-      # console.log("END");
-      res.end()
-    )
-    
-  )
+  catch e
+    console.log e
 
 exports.books = (req, res) -> 
 
