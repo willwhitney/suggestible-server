@@ -192,7 +192,7 @@
         place.url = place.mobile_url;
         place["description"] = place['snippet_text'];
         place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name);
-        place.maplocation = place.location.display_address[0] + place.location.display_address[1];
+        place.maplocation = place.location.display_address[0] + ", " + place.location.display_address[1];
       }
       res.write(JSON.stringify(places));
       return res.end();
