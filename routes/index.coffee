@@ -34,6 +34,7 @@ exports.movies = (req, res) ->
         
       )
       result.on('end', () ->
+        console.log movies
         try
           movieject = JSON.parse(movies)['movies']
         catch e

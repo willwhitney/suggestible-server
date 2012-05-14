@@ -37,6 +37,7 @@
         });
         return result.on('end', function() {
           var movie, movieject, _i, _len;
+          console.log(movies);
           try {
             movieject = JSON.parse(movies)['movies'];
           } catch (e) {
