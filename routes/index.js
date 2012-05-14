@@ -42,7 +42,6 @@
           } catch (e) {
             "Some shit went wrong parsing movies.";
 
-            console.log(e);
           }
           for (_i = 0, _len = movieject.length; _i < _len; _i++) {
             movie = movieject[_i];
@@ -57,8 +56,7 @@
         });
       });
     } catch (e) {
-      console.log("Some shit went wrong with a movie request.");
-      return console.log(e);
+      return console.log("Some shit went wrong with a movie request.");
     }
   };
 

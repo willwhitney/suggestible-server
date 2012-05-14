@@ -39,7 +39,7 @@ exports.movies = (req, res) ->
           movieject = JSON.parse(movies)['movies']
         catch e
           "Some shit went wrong parsing movies."
-          console.log e
+          # console.log e
         
         for movie in movieject
           if movie.posters.detailed?
@@ -56,7 +56,7 @@ exports.movies = (req, res) ->
     )
   catch e
     console.log "Some shit went wrong with a movie request."
-    console.log e
+    # console.log e
 
 exports.books = (req, res) -> 
 
