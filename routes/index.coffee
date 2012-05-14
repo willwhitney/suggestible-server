@@ -150,6 +150,7 @@ exports.restaurants = (req, res) ->
       place.description = place.snippet_text
       place.url = place.mobile_url
       place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name)
+      place.maplocation = place.location.display_address[0] + place.location.display_address[1]
 
     # console.log places
     res.write JSON.stringify places
@@ -189,6 +190,7 @@ exports.outings = (req, res) ->
       place.url = place.mobile_url
       place["description"] = place['snippet_text']
       place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name)
+      place.maplocation = place.location.display_address[0] + place.location.display_address[1]
 
     # console.log places    
     res.write JSON.stringify places
