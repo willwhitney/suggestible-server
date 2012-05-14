@@ -148,7 +148,6 @@
         place.url = place.mobile_url;
         place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name);
       }
-      console.log(places);
       res.write(JSON.stringify(places));
       return res.end();
     });
@@ -184,7 +183,6 @@
         place["description"] = place['snippet_text'];
         place.imageurl = "http://afternoon-planet-7936.herokuapp.com/imageSearch?query=" + encodeURIComponent(place.name);
       }
-      console.log(places);
       res.write(JSON.stringify(places));
       return res.end();
     });
