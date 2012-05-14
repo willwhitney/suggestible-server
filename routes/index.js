@@ -37,7 +37,13 @@
         });
         return result.on('end', function() {
           var movie, movieject, _i, _len;
-          movieject = JSON.parse(movies)['movies'];
+          try {
+            movieject = JSON.parse(movies)['movies'];
+          } catch (e) {
+            "Some shit went wrong parsing movies.";
+
+            console.log(e);
+          }
           for (_i = 0, _len = movieject.length; _i < _len; _i++) {
             movie = movieject[_i];
             if (movie.posters.detailed != null) {
@@ -51,6 +57,7 @@
         });
       });
     } catch (e) {
+      console.log("Some shit went wrong with a movie request.");
       return console.log(e);
     }
   };
@@ -74,17 +81,23 @@
         });
         return result.on('end', function() {
           var book, bookject, _i, _len;
-          bookject = JSON.parse(books);
-          bookject = (function() {
-            var _i, _len, _ref, _results;
-            _ref = bookject['results'];
-            _results = [];
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              book = _ref[_i];
-              _results.push(book['book_details'][0]);
-            }
-            return _results;
-          })();
+          try {
+            bookject = JSON.parse(books);
+            bookject = (function() {
+              var _i, _len, _ref, _results;
+              _ref = bookject['results'];
+              _results = [];
+              for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                book = _ref[_i];
+                _results.push(book['book_details'][0]);
+              }
+              return _results;
+            })();
+          } catch (e) {
+            "Some shit went wrong parsing books.";
+
+            console.log(e);
+          }
           for (_i = 0, _len = bookject.length; _i < _len; _i++) {
             book = bookject[_i];
             if (book.title != null) {
@@ -99,6 +112,7 @@
         });
       });
     } catch (e) {
+      console.log("Some shit went wrong with a book request.");
       return console.log(e);
     }
   };

@@ -34,7 +34,11 @@ exports.movies = (req, res) ->
         
       )
       result.on('end', () ->
-        movieject = JSON.parse(movies)['movies']
+        try
+          movieject = JSON.parse(movies)['movies']
+        catch e
+          "Some shit went wrong parsing movies."
+          console.log e
         
         for movie in movieject
           if movie.posters.detailed?
@@ -50,6 +54,7 @@ exports.movies = (req, res) ->
       
     )
   catch e
+    console.log "Some shit went wrong with a movie request."
     console.log e
 
 exports.books = (req, res) -> 
@@ -78,9 +83,13 @@ exports.books = (req, res) ->
         books += chunk
       )
       result.on('end', () ->
-        bookject = JSON.parse books
-        bookject = (book['book_details'][0] for book in bookject['results'])
-  
+        try
+          bookject = JSON.parse books
+          bookject = (book['book_details'][0] for book in bookject['results'])
+        catch e
+          "Some shit went wrong parsing books."
+          console.log e
+
         for book in bookject
           if book.title?
             book.title = toTitleCase(book.title)
@@ -97,7 +106,8 @@ exports.books = (req, res) ->
       )
     )
   catch e
-      console.log e
+    console.log "Some shit went wrong with a book request."
+    console.log e
   
 exports.restaurants = (req, res) -> 
 
